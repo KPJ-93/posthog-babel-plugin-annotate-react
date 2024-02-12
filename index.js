@@ -1,6 +1,6 @@
-const webComponentName = 'data-component';
-const webElementName = 'data-element';
-const webSourceFileName = 'data-source-file';
+const webComponentName = 'data-ph-capture-attribute-component';
+const webElementName = 'data-ph-capture-attribute-element';
+const webSourceFileName = 'data-ph-capture-attribute-file';
 
 const nativeComponentName = 'dataComponent';
 const nativeElementName = 'dataElement';
@@ -208,7 +208,16 @@ function applyAttributes(t, openingElement, componentName, sourceFileName, attri
   }
   if (!openingElement.node.attributes) openingElement.node.attributes = {}
 
-  const elementName = openingElement.node.name.name || 'unknown'
+  let elementName = openingElement.node.name.name || 'unknown'
+  let className = openingElement.node.attributes.find(att => (att.name?.name || "") === "className")
+
+  if (!className) className = t.jSXAttribute(t.jSXIdentifier("className"), t.stringLiteral(""))
+
+  // add component to className prop to make use of merging of className props
+  className.value.value += ` component-${componentName}`
+  // console.log("element", elementName, "component", componentName)
+
+  openingElement.node.attributes.push(className)
 
   const ignoredComponentFromOptions = ignoreComponentsFromOption && !!ignoreComponentsFromOption.find(component =>
     matchesIgnoreRule(component[0], sourceFileName) &&
@@ -285,7 +294,7 @@ function processJSX(annotateFragments, t, jsxNode, componentName, sourceFileName
         shouldSetComponentName = false
         processJSX(annotateFragments, t, child, componentName, sourceFileName, attributeNames, ignoreComponentsFromOption)
       } else {
-        processJSX(annotateFragments, t, child, null, sourceFileName, attributeNames, ignoreComponentsFromOption)
+        processJSX(annotateFragments, t, child, componentName, sourceFileName, attributeNames, ignoreComponentsFromOption)
       }
     }
   }
@@ -327,10 +336,15 @@ function matchesIgnoreRule(rule, name) {
 }
 
 function hasNodeNamed(openingElement, name) {
-  return openingElement.node.attributes.find(node => {
+  const ret =  openingElement.node.attributes.find(node => {
     if (!node.name) return
     return node.name.name === name
   })
+  if (ret) {
+    console.error("Found node already! Name:", name)
+  }
+  return ret
+
 }
 
 // We don't write data-element attributes for these names

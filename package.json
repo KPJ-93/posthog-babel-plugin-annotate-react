@@ -1,17 +1,17 @@
 {
-  "name": "@fullstory/babel-plugin-annotate-react",
+  "name": "@kpj/posthog-babel-plugin-annotate-react",
   "version": "2.3.0",
-  "description": "A Babel plugin that annotates React components, making them easier to target with FullStory search",
+  "description": "A Babel plugin that annotates React components, making them easier to target with PostHog search",
   "main": "index.js",
-  "homepage": "https://github.com/fullstorydev/fullstory-babel-plugin-annotate-react",
+  "homepage": "https://github.com/KPJ-93/posthog-babel-plugin-annotate-react",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fullstory-babel-plugin-annotate-react.git"
+    "url": "git+https://github.com/KPJ-93/posthog-babel-plugin-annotate-react.git"
   },
   "scripts": {
     "test": "jest"
   },
-  "author": "FullStory",
+  "author": "KPJ-93",
   "license": "MIT",
   "jest": {
     "roots": [
